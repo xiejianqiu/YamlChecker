@@ -11,7 +11,7 @@
             {
                 printlog = "1" == args[2];
             }
-            AppFacade.Execude(filePath, logSavePath, printlog);
+            AppFacade.StartUp(filePath, logSavePath, printlog);
         }
     }
 }

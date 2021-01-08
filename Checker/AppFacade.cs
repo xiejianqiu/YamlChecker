@@ -7,11 +7,20 @@ namespace YAMLCheckerWin
     public class AppFacade
     {
         static Dictionary<Type, BaseChecker> checkerDict = new Dictionary<Type, BaseChecker>();
-        public static void Execude(string filePath, string logSavePath, bool printlog) {
+        public static void StartUp(string filePath, string logSavePath, bool printlog) {
             if (File.Exists(logSavePath))
             {
                 File.Delete(logSavePath);
             }
+            AppFacade.Discover(filePath, printlog);
+            AppFacade.Execute(logSavePath);
+        }
+        /// <summary>
+        /// 发现类并初始化
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="printlog"></param>
+        static void Discover(string filePath, bool printlog) {
             var attrList = new List<CheckerAttribute>();
             var assembly = Assembly.GetCallingAssembly();
             foreach (var type in assembly.DefinedTypes)
@@ -28,6 +37,12 @@ namespace YAMLCheckerWin
                     }
                 }
             }
+        }
+        /// <summary>
+        /// 开始执行检查
+        /// </summary>
+        /// <param name="logSavePath"></param>
+        static void Execute(string logSavePath) {
             var iter = checkerDict.GetEnumerator();
             while (iter.MoveNext())
             {
